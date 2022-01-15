@@ -1,0 +1,1 @@
+p main.py --epochs=50 --batch-size=64 --learning-rate-type="automatic"
