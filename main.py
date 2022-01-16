@@ -1,5 +1,6 @@
 import argparse as ap
 import json
+import os
 from time import time
 
 import matplotlib.pyplot as plt
@@ -10,8 +11,6 @@ from torch import nn, optim
 from torchvision import datasets, transforms
 
 import sort
-
-
 
 parser = ap.ArgumentParser()
 parser.add_argument("--batch-size", type=int, default=64, help="default is 64")
@@ -24,6 +23,7 @@ parser.add_argument("--learning-rate-default-value", type=float, default=0.1)
 config = parser.parse_args()
 
 
+num=8
 
 transform = transforms.Compose([transforms.ToTensor(),
                               transforms.Normalize((0.5,), (0.5,)),
@@ -64,6 +64,18 @@ model = nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
                       nn.Linear(hidden_sizes[-1], output_size),
                       nn.LogSoftmax(dim=1))
 
+
+layers=len(hidden_sizes)+1
+
+print("Logs/MNIST-epochs={}-layers={}-{}.pt\n\n\n\n\n".format(config.epochs, layers, num))
+if os.path.exists("Logs/MNIST-epochs={}-layers={}-{}.pt".format(config.epochs,layers,num)):
+    a = input("Logs/MNIST-epochs={}-layers={}-{}.pt exists, do you want to overwrite it? (y/n)".format(config.epochs,layers,num))
+    if a.lower() == "y":
+        pass
+    else:
+        exit()
+
+print("EXECUTED")
 
 def train():
     #train
@@ -167,11 +179,11 @@ optimizer = optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
 time0 = time()
 epochs = config.epochs
 print('{} epochs'.format(epochs))
-layers=len(hidden_sizes)+1
-num=8
 validation_results = {}
 max_score = 0
 max_score_epoch = 0
+
+
 
 if config.learning_rate_type == 'automatic':
     lr = {}
