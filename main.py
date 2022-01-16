@@ -20,10 +20,11 @@ parser.add_argument("--learning-rate", type=dict, default={1: 0.01, 5: 0.0075, 1
 parser.add_argument("--learning-rate-decrease-epochs", type=list, default=[10,25, 40])
 parser.add_argument("--learning-rate-decrease-quantity", type=int, default=5)
 parser.add_argument("--learning-rate-default-value", type=float, default=0.1)
+parser.add_argument("--weight-decay", type=float, default=1e-4)
 config = parser.parse_args()
 
 
-num=8
+num=11
 
 transform = transforms.Compose([transforms.ToTensor(),
                               transforms.Normalize((0.5,), (0.5,)),
@@ -67,7 +68,7 @@ model = nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
 
 layers=len(hidden_sizes)+1
 
-print("Logs/MNIST-epochs={}-layers={}-{}.pt\n\n\n\n\n".format(config.epochs, layers, num))
+# print("Logs/MNIST-epochs={}-layers={}-{}.pt\n\n\n\n\n".format(config.epochs, layers, num))
 if os.path.exists("Logs/MNIST-epochs={}-layers={}-{}.pt".format(config.epochs,layers,num)):
     a = input("Logs/MNIST-epochs={}-layers={}-{}.pt exists, do you want to overwrite it? (y/n)".format(config.epochs,layers,num))
     if a.lower() == "y":
@@ -75,7 +76,7 @@ if os.path.exists("Logs/MNIST-epochs={}-layers={}-{}.pt".format(config.epochs,la
     else:
         exit()
 
-print("EXECUTED")
+# print("EXECUTED")
 
 def train():
     #train
@@ -173,7 +174,7 @@ print('Before backward pass: \n', model[0].weight.grad)
 loss.backward()
 print('After backward pass: \n', model[0].weight.grad)
 
-optimizer = optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
+optimizer = optim.SGD(model.parameters(), lr=0.003, momentum=0.9, weight_decay=config.weight_decay)
 
 
 time0 = time()
@@ -233,7 +234,7 @@ print("\nModel Accuracy =", (correct_count/all_count))
 
 f = open("scores.json")
 dictionary = json.load(f)
-dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size}#, "model":model} ## incomplete
+dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":config.weight_decay}#, "model":model} ## incomplete
 json.dump(dictionary, open("scores.json", "w"), indent=4)
 
 sort.sort_dict()
