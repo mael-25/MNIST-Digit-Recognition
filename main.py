@@ -43,7 +43,7 @@ print(images.shape)
 print(labels.shape)
 
 figure = plt.figure()
-num_of_images = 60
+num_of_images = 30
 for index in range(1, num_of_images + 1):
     plt.subplot(6, 10, index)
     plt.axis('off')
@@ -239,7 +239,7 @@ print("\nModel Accuracy =", (correct_count/all_count))
 f = open("scores.json")
 dictionary = json.load(f)
 dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":config.weight_decay}#, "model":model} ## incomplete
-json.dump(dictionary, open("scores.json", "w"))
+json.dump(dictionary, open("scores.json", "w"), indent=4)
 
 sort.sort_dict()
 

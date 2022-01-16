@@ -33,7 +33,7 @@ def sort_dict(file:str="scores.json"):
     # print(dictionary2)
 
     # print(json.dumps(dictionary2, indent=4))
-    json.dump(dictionary2, open(file, "w"))
+    json.dump(dictionary2, open(file, "w"), indent=4)
 
 def best_model_get_name(pos: int=0,file:str="scores.json",  ):
     lst = list(json.load(open(file=file)))
