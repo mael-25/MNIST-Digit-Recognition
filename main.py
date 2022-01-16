@@ -24,7 +24,7 @@ parser.add_argument("--weight-decay", type=float, default=1e-4)
 config = parser.parse_args()
 
 
-num=11
+num=1
 
 transform = transforms.Compose([transforms.ToTensor(),
                               transforms.Normalize((0.5,), (0.5,)),
@@ -51,7 +51,7 @@ for index in range(1, num_of_images + 1):
 
 
 input_size = 784 ## Square of 28
-hidden_sizes = [ 256, 128, 64, 32]
+hidden_sizes = [512, 256, 128, 64, 32,16]
 output_size = 10
 
 model = nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
@@ -61,6 +61,10 @@ model = nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
                       nn.Linear(hidden_sizes[1], hidden_sizes[2]),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[2], hidden_sizes[3]),
+                      nn.ReLU(),
+                      nn.Linear(hidden_sizes[3], hidden_sizes[4]),
+                      nn.ReLU(),
+                      nn.Linear(hidden_sizes[4], hidden_sizes[5]),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[-1], output_size),
                       nn.LogSoftmax(dim=1))
@@ -235,7 +239,7 @@ print("\nModel Accuracy =", (correct_count/all_count))
 f = open("scores.json")
 dictionary = json.load(f)
 dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":config.weight_decay}#, "model":model} ## incomplete
-json.dump(dictionary, open("scores.json", "w"), indent=4)
+json.dump(dictionary, open("scores.json", "w"))
 
 sort.sort_dict()
 
