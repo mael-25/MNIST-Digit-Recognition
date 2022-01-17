@@ -1,1 +1,1 @@
-p main.py --epochs=50 --batch-size=32 --learning-rate-type="automatic" --weight-decay=0.001
+p main.py --epochs=100 --batch-size=16 --learning-rate-type="automatic" --weight-decay=0.001

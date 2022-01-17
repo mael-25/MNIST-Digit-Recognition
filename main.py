@@ -1,6 +1,7 @@
 import argparse as ap
 import json
 import os
+import random
 from time import time
 
 import matplotlib.pyplot as plt
@@ -21,7 +22,37 @@ parser.add_argument("--learning-rate-decrease-epochs", type=list, default=[10,25
 parser.add_argument("--learning-rate-decrease-quantity", type=int, default=5)
 parser.add_argument("--learning-rate-default-value", type=float, default=0.1)
 parser.add_argument("--weight-decay", type=float, default=1e-4)
+parser.add_argument("--dropout",  default=0.075)
+
 config = parser.parse_args()
+
+if type(config.dropout ) == float:
+    dropout = config.dropout
+
+elif type(config.dropout) == str: 
+    if config.dropout.lower == "R":
+        dropout = random.randint(0, 75)/100
+
+    else:
+        assert "ERROR OF DROPOUT!"
+
+else:
+    assert "ERROR OF DROPOUT!"
+
+#######################
+
+if type(config.weight_decay ) == float:
+    dropout = config.weight_decay
+
+elif type(config.weight_decay) == str: 
+    if config.weight_decay.lower == "R":
+        dropout = random.randint(0, 75)/100
+
+    else:
+        assert "ERROR OF weight decay!".upper()
+
+else:
+    assert "ERROR OF weight decay!".upper()
 
 
 num=1
@@ -43,7 +74,7 @@ print(images.shape)
 print(labels.shape)
 
 figure = plt.figure()
-num_of_images = 30
+num_of_images = 10
 for index in range(1, num_of_images + 1):
     plt.subplot(6, 10, index)
     plt.axis('off')
@@ -55,16 +86,22 @@ hidden_sizes = [512, 256, 128, 64, 32,16]
 output_size = 10
 
 model = nn.Sequential(nn.Linear(input_size, hidden_sizes[0]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[0], hidden_sizes[1]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[1], hidden_sizes[2]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[2], hidden_sizes[3]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[3], hidden_sizes[4]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[4], hidden_sizes[5]),
+                      nn.Dropout(p=config.dropout),
                       nn.ReLU(),
                       nn.Linear(hidden_sizes[-1], output_size),
                       nn.LogSoftmax(dim=1))
@@ -238,7 +275,7 @@ print("\nModel Accuracy =", (correct_count/all_count))
 
 f = open("scores.json")
 dictionary = json.load(f)
-dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":config.weight_decay}#, "model":model} ## incomplete
+dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":config.weight_decay, "dropout":config.dropout}#, "model":model} ## incomplete
 json.dump(dictionary, open("scores.json", "w"), indent=4)
 
 sort.sort_dict()
