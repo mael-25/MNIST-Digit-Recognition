@@ -73,7 +73,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.0005,
-        "dropout": 0.0005
+        "dropout": 0.0005,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-1.pt": {
         "score": 0.9849,
@@ -149,7 +150,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-5.pt": {
         "score": 0.9848,
@@ -225,7 +227,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.001,
-        "dropout": 0.0001
+        "dropout": 0.0001,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=75-layers=7-2.pt": {
         "score": 0.9834,
@@ -330,7 +333,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.001,
-        "dropout": 0.0001
+        "dropout": 0.0001,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=40-layers=7-1.pt": {
         "score": 0.9854,
@@ -396,7 +400,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=40-layers=5-1.pt": {
         "score": 0.9849,
@@ -460,7 +465,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.0005,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-11.pt": {
         "score": 0.9845,
@@ -534,7 +540,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.0001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-8.pt": {
         "score": 0.9852,
@@ -608,7 +615,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=40-layers=5-2.pt": {
         "score": 0.985,
@@ -672,7 +680,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-10.pt": {
         "score": 0.9842,
@@ -746,7 +755,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.0001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-6.pt": {
         "score": 0.9844,
@@ -820,7 +830,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-2.pt": {
         "score": 0.9837,
@@ -898,7 +909,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-2.pt": {
         "score": 0.9827,
@@ -974,7 +986,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-7.pt": {
         "score": 0.9837,
@@ -1048,7 +1061,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-9.pt": {
         "score": 0.9842,
@@ -1122,7 +1136,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=30-layers=5-1.pt": {
         "score": 0.983,
@@ -1180,7 +1195,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-4.pt": {
         "score": 0.9825,
@@ -1258,7 +1274,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-7.pt": {
         "score": 0.981,
@@ -1334,7 +1351,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.0025,
-        "dropout": 0.0025
+        "dropout": 0.0025,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=6-2.pt": {
         "score": 0.9812,
@@ -1414,7 +1432,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-1.pt": {
         "score": 0.9789,
@@ -1493,7 +1512,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-3.pt": {
         "score": 0.978,
@@ -1571,7 +1591,8 @@
         },
         "batch-size": 256,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-5.pt": {
         "score": 0.9763,
@@ -1644,7 +1665,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=6-1.pt": {
         "score": 0.9766,
@@ -1724,7 +1746,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=100-layers=7-1.pt": {
         "score": 0.975,
@@ -1850,7 +1873,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=100-layers=5-1.pt": {
         "score": 0.9761,
@@ -1979,7 +2003,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=25-layers=7-4.pt": {
         "score": 0.1135,
@@ -2030,7 +2055,8 @@
         },
         "batch-size": 16,
         "weight-decay": 1e-08,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-4.pt": {
         "score": 0.9756,
@@ -2106,7 +2132,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=40-layers=7-2.pt": {
         "score": 0.9719,
@@ -2172,7 +2199,8 @@
         },
         "batch-size": 64,
         "weight-decay": 0.005,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=25-layers=7-3.pt": {
         "score": 0.1135,
@@ -2223,7 +2251,8 @@
         },
         "batch-size": 16,
         "weight-decay": 1e-05,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=25-layers=7-2.pt": {
         "score": 0.9602,
@@ -2274,7 +2303,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=25-layers=7-1.pt": {
         "score": 0.9598,
@@ -2325,7 +2355,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0.075
+        "dropout": 0.075,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=7-3.pt": {
         "score": 0.4696,
@@ -2401,7 +2432,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.001,
-        "dropout": 0.25
+        "dropout": 0.25,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=75-layers=7-1.pt": {
         "score": 0.1135,
@@ -2502,7 +2534,8 @@
         },
         "batch-size": 16,
         "weight-decay": 0.075,
-        "dropout": 0.0001
+        "dropout": 0.0001,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=3-1.pt": {
         "score": 0.1135,
@@ -2574,7 +2607,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.005,
-        "dropout": 0.005
+        "dropout": 0.005,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=50-layers=5-12.pt": {
         "score": 0.1135,
@@ -2648,7 +2682,8 @@
         },
         "batch-size": 32,
         "weight-decay": 0.005,
-        "dropout": 0.005
+        "dropout": 0.005,
+        "model-class-type": "linear"
     },
     "Logs/MNIST-epochs=1-layers=7-2.pt": {
         "score": 0.1135,
@@ -2702,6 +2737,7 @@
         },
         "batch-size": 64,
         "weight-decay": 0.5,
-        "dropout": 0
+        "dropout": 0,
+        "model-class-type": "linear"
     }
 }
