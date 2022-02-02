@@ -7,6 +7,8 @@ from time import time
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import torchvision
 from torch import nn, optim
 from torchvision import datasets, transforms
@@ -23,7 +25,7 @@ parser.add_argument("--learning-rate-decrease-quantity", type=int, default=5)
 parser.add_argument("--learning-rate-default-value", type=float, default=0.1)
 parser.add_argument("--weight-decay", type=float, default=0.001)
 parser.add_argument("--dropout", type=float, default=0.0001)
-parser.add_argument("--model-type", type=str, default="linear")
+parser.add_argument("--model-type", type=str, default="conv2d")
 
 config = parser.parse_args()
 
@@ -102,7 +104,7 @@ else:
 #     assert "ERROR OF LR!".upper()
 
 # print("COMPLETED", type(config.learning_rate))
-num=12
+num=13
 
 transform = transforms.Compose([transforms.ToTensor(),
                               transforms.Normalize((0.5,), (0.5,)),
@@ -135,34 +137,128 @@ output_size = 10
 # hidden_sizes = [512, 256, 128, 64, 32,16]
 # output_size = 10
 
-if config.model_type.lower == "linear":
-    type = nn.Linear
-elif config.model_type.lower == "conv2d":
-    type = nn.Conv2d
+if config.model_type.lower() == "linear":
+    TYPE = nn.Linear
+elif config.model_type.lower() == "conv2d":
+    TYPE = nn.Conv2d
 else:
-    assert "ERROR! --model-type isn't in lst"
+    assert "ERROR! --model-type isn't 'Linear' or 'Conv2D'"
 
-model = nn.Sequential(type(input_size, hidden_sizes[0]),
-                      nn.Dropout(p=dropout),
+# print(TYPE)
+
+class Net(nn.Module):
+
+    def __init__(self):
+        super(Net, self).__init__()
+        # 1 input image channel, 6 output channels, 5x5 square convolution
+        # kernel
+        self.conv1 = nn.Conv2d(1, 6, 5)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        # an affine operation: y = Wx + b
+        self.fc1 = nn.Linear(16 * 5 * 5, 120)  # 5*5 from image dimension
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        # Max pooling over a (2, 2) window
+        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
+        # If the size is a square, you can specify with a single number
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = torch.flatten(x, 1) # flatten all dimensions except the batch dimension
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+
+net = Net()
+print(net)
+
+random_data = torch.rand((1, 1, 28, 28))
+
+# my_nn = Net()
+# result = my_nn(random_data)
+# print (result, "NUMBER 1")
+# print (result, "NUMBER 2")
+# print (result, "NUMBER 3")
+
+# # # # # # model=net
+
+# model = nn.Sequential(TYPE(input_size, hidden_sizes[0]),
+#                       nn.Dropout(p=dropout),
+#                       nn.ReLU(),
+#                       TYPE(hidden_sizes[0], hidden_sizes[1]),
+#                       nn.Dropout(p=dropout),
+#                       nn.ReLU(),
+#                       TYPE(hidden_sizes[1], hidden_sizes[2]),
+#                       nn.Dropout(p=dropout),
+#                       nn.ReLU(),
+#                       TYPE(hidden_sizes[2], hidden_sizes[3]),
+#                       nn.Dropout(p=dropout),
+#                       nn.ReLU(),
+#                     #   TYPE(hidden_sizes[3], hidden_sizes[4]),
+#                     #   nn.Dropout(p=dropout),
+#                     #   nn.ReLU(),
+#                     #   TYPE(hidden_sizes[4], hidden_sizes[5]),
+#                     #   nn.Dropout(p=dropout),
+#                     #   nn.ReLU(),
+#                       TYPE(hidden_sizes[-1], output_size),
+#                       nn.LogSoftmax(dim=1))
+model = nn.Sequential(nn.Conv2d(1, 16, 3),
+                    ###   nn.Dropout(p=dropout),
                       nn.ReLU(),
-                      type(hidden_sizes[0], hidden_sizes[1]),
-                      nn.Dropout(p=dropout),
+                      nn.Conv2d(16, 32, 3),
+                    ###   nn.Dropout(p=dropout),
                       nn.ReLU(),
-                      type(hidden_sizes[1], hidden_sizes[2]),
-                      nn.Dropout(p=dropout),
+                    #   nn.Conv2d(32, 64, 3),
+                      nn.AvgPool2d(2),
+                    ###   nn.Dropout(p=dropout),
                       nn.ReLU(),
-                      type(hidden_sizes[2], hidden_sizes[3]),
-                      nn.Dropout(p=dropout),
+                      nn.Conv2d(32, 128, 3),
+                    ##   nn.Dropout(p=dropout),
                       nn.ReLU(),
-                    #   type(hidden_sizes[3], hidden_sizes[4]),
-                    #   nn.Dropout(p=dropout),
-                    #   nn.ReLU(),
-                    #   type(hidden_sizes[4], hidden_sizes[5]),
-                    #   nn.Dropout(p=dropout),
-                    #   nn.ReLU(),
-                      type(hidden_sizes[-1], output_size),
+                      nn.Conv2d(128, 256, 3),
+                    ##  nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.AvgPool2d(2),
+                      nn.ReLU(),
+                      nn.Conv2d(256, 512, 4),
+                    # #  nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.Conv2d(512, 128, 1),
+                      nn.ReLU(),
+                      nn.Conv2d(128, 32, 1),
+                      nn.ReLU(),
+                      nn.Conv2d(32, 10, 1),
+                    ##   nn.Linear(9216, 128),
+                    ##   nn.Linear(128, 10),
                       nn.LogSoftmax(dim=1))
 
+
+
+model = nn.Sequential(nn.Conv2d(1, 16, 3),
+                    ###   nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.Conv2d(16, 32, 3),
+                    ###   nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                    #   nn.Conv2d(32, 64, 3),
+                      nn.AvgPool2d(8),
+                    ###   nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.Conv2d(32, 64, 3),
+                    ##   nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.Conv2d(64, 32, 1),
+                    ##  nn.Dropout(p=dropout),
+                      nn.ReLU(),
+                      nn.Conv2d(32, 10, 1),
+                    ##   nn.Linear(9216, 128),
+                    ##   nn.Linear(128, 10),
+                      nn.LogSoftmax(dim=1))
+# model = result
+print(model)
+print(type(model))
 
 layers=len(hidden_sizes)+1
 
@@ -186,12 +282,13 @@ def train():
     running_loss = 0
     for images, labels in trainloader:
         # Flatten MNIST images into a 784 long vector
-        images = images.view(images.shape[0], -1)
+        #images = images.view(images.shape[0], -1)
     
         # Training pass
         optimizer.zero_grad()
         
         output = model(images)
+        output = output.squeeze()
         loss = criterion(output, labels)
         
         #This is where the model learns by backpropagating
@@ -207,12 +304,17 @@ def train():
 
 
 def val():
+    a = time()
     correct_count, all_count = 0, 0
+    # print(len(valloader))
+    a = 0
     for images,labels in valloader: ##val
+        # print(len(labels))
         for i in range(len(labels)):
-            img = images[i].view(1, 784)
+            # img = images[i].view(1, 784)
             with torch.no_grad():
-                logps = model(img)
+                # logps = model(img)
+                logps = model(images)
 
             
             ps = torch.exp(logps)
@@ -222,6 +324,12 @@ def val():
             if(true_label == pred_label):
                 correct_count += 1
             all_count += 1
+            ##print(all_count,", ",i,end='\r')
+        a +=1
+        print(a, end="\r")
+
+    b = time()-a
+    print("{}:{} time eclapsed for val".format(b//60, b%60//1))
     
     return correct_count, all_count
             
@@ -230,9 +338,10 @@ def test():
     correct_count, all_count = 0, 0
     for images,labels in valloader: ##test
         for i in range(len(labels)):
-            img = images[i].view(1, 784)
+            # img = images[i].view(1, 784)
             with torch.no_grad():
-                logps = model(img)
+                # logps = model(img)
+                logps = model(images)
 
             
             ps = torch.exp(logps)
@@ -268,9 +377,14 @@ print(model)
 
 criterion = nn.NLLLoss()
 images, labels = next(iter(trainloader))
-images = images.view(images.shape[0], -1)
+# images = images.view(images.shape[0], -1)
+
+print(images)
 
 logps = model(images) #log probabilities
+print(logps.detach().numpy().shape)
+logps = logps.squeeze()
+print(logps.detach().numpy().shape)
 loss = criterion(logps, labels) #calculate the NLL loss
 
 print('Before backward pass: \n', model[0].weight.grad)
@@ -293,8 +407,8 @@ max_score_epoch = 0
 
 print(lr)
 
-correct_count, all_count = val()
-print(correct_count/all_count)
+# correct_count, all_count = val()
+# print(correct_count/all_count, "TEST EPOCH")
 
 for e in range(1,epochs+1):
     model.train()
@@ -333,7 +447,7 @@ print("\nModel Accuracy =", (correct_count/all_count))
 
 f = open("scores.json")
 dictionary = json.load(f)
-dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":weight_decay, "dropout":dropout, "model-type":config.model_type}#, "model":model} ## incomplete
+dictionary['Logs/MNIST-epochs={}-layers={}-{}.pt'.format( epochs, layers, num)] ={"score":correct_count/all_count, "max-score":max_score,"max-score-epoch":max_score_epoch, "epochs":epochs, "model-input-size":input_size, "model-hidden-sizes":hidden_sizes, "model-output-size":output_size, "validation-results":validation_results, "learning-rate":lr, "batch-size":config.batch_size, "weight-decay":weight_decay, "dropout":dropout, "model-class-type":config.model_type}#, "model":model} ## incomplete
 json.dump(dictionary, open("scores.json", "w"), indent=4)
 
 sort.sort_dict()
