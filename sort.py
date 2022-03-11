@@ -38,11 +38,22 @@ def sort_dict(file:str="scores.json"):
 def best_model_get_name(pos: int=0,file:str="scores.json",  ):
     lst = list(json.load(open(file=file)))
     if pos == 0:
-        print(lst)
+        a =lst
 
     else:
-        print(lst[pos-1])
+        a = lst[pos-1]
+    print(a)
+    return a
 
 def show_config(pos: int=1,file:str="scores.json", ):
     lst = list(json.load(open(file=file)))[pos-1]
     print(json.dumps(json.load(open(file=file))[lst], indent=4))
+
+# def change_config()
+def clean(file:str="scores.json"):
+    file2 = str(open(file=file))
+    file = file2.replace('\n', '''
+''')
+    print(str(file))
+    
+clean()

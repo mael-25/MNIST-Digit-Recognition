@@ -1,0 +1,1 @@
+python3.9 run.py --epochs=50 --batch-size=32 --learning-rate-type="automatic" --weight-decay=0.005 --dropout=0.005 --model-type="linear" #--learning-rate-decrease-epochs=[3,6,9]
