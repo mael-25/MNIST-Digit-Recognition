@@ -2,7 +2,7 @@ import argparse as ap
 import json
 import os
 import random
-from time import time
+from time import time, sleep
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,7 +31,7 @@ parser.add_argument("--model-type", type=str, default="conv2d")
 
 config = parser.parse_args()
 
-# print("epochs:" , config.epochs)
+print("epochs:" , config.epochs)
 COLOURS = ['RED', 'GREEN','YELLOW', 'BLUE', 'MAGENTA','CYAN', 'WHITE']
 
 
@@ -75,6 +75,9 @@ if config.learning_rate_type == 'automatic':
 else:
     lr = config.learning_rate
 
+print(lr)
+print(config.learning_rate)
+
 # print(lr, "1!")
 
 # # try:LR = int(config.learning_rate) 
@@ -108,7 +111,7 @@ else:
 # #     assert "ERROR OF LR!".upper()
 
 # # print("COMPLETED", type(config.learning_rate))
-num=9
+num=1
 
 transform = transforms.Compose([transforms.ToTensor(),
                               transforms.Normalize((0.5,), (0.5,)),
@@ -147,9 +150,9 @@ hidden_sizes = [512,
                 16]
 output_size = 10
 
-if config.model_type.lower() == "linear":
+if str(config.model_type).lower() == "linear":
     TYPE = nn.Linear
-elif config.model_type.lower() == "conv2d":
+elif str(config.model_type).lower() == "conv2d":
     TYPE = nn.Conv2d
 else:
     assert "ERROR! --model-type isn't 'Linear' or 'Conv2D'"
@@ -328,13 +331,18 @@ def train():
     x = tqdm(range(len(trainloader)), colour=random.choice(COLOURS).lower(), leave=False)
     x2 = iter(x)
     pred = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
+    lenTL  = len(trainloader)
+    crTLPos = 1
     for images, labels in trainloader:
+        x.set_description("==> {}-{}".format(e, crTLPos))
         ###images, labels = next(tl) ###NEXT STEP
         # tr2 = iter(tr2)
         # images2, labels2 = next(tr2)
         # print(images2, labels2)
         # Flatten MNIST images into a 784 long vector
-        if config.model_type == "linear": images = images.view(images.shape[0], -1)
+        if str(config.model_type).lower() == "linear": images = images.view(images.shape[0], -1)
+        else:images = images.view(images.size(0), -1) ##comment if conv2d
+
     
         # Training pass
         optimizer.zero_grad()
@@ -353,7 +361,9 @@ def train():
         
         running_loss += loss.item()
         next(x2)
+        crTLPos+=1
     else:
+        x.set_description("==> Epoch {} TRAINING terminated")
         print("==> Epoch {} - Training loss: {}".format(e, running_loss/len(trainloader)))
     
 
@@ -402,12 +412,18 @@ def val():
     pred = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
     x = tqdm(range(len(valloader)), colour=random.choice(COLOURS).lower(), leave=False)
     x2 = iter(x)
+    crVLPos = 1
+    b = 0
     for images,labels in valloader: ##val
+
+        x.set_description("==> {}-{}".format(e, crVLPos))
         # print(valloader)
         # print(len(labels))
         next(x2)
         for i in range(len(labels)):
-            if config.model_type=="linear": img = images[i].view(1, 784)
+            if str(config.model_type).lower() == "linear": img = images[i].view(1, 784)
+            else:images = images.view(images.size(0), -1) ##comment if conv2d
+
             with torch.no_grad():
                 if config.model_type=="linear": logps = model(img)
                 else:logps = model(images)
@@ -424,12 +440,16 @@ def val():
             # print( "Predicted: {} True: {}".format(pred_label, true_label))
             ##print(all_count,", ",i,end='\r')
         a +=1
+        b += 1
         # print(a, end="\r")
-    time.sleep(0.25)
-    print(pred)
+        crVLPos +=1
 
-    b = time()-a
+    # b = time()-a
     # print("{}:{} time eclapsed for val".format(int(b//60), int(b%60//1)))
+    
+    x.set_description("==> Epoch {} VALIDATION terminated")
+    sleep(0.25)
+    print(pred)
   
     return correct_count, all_count
             
@@ -456,7 +476,7 @@ def test():
                 correct_count += 1
             all_count += 1
         
-    time.sleep(0.25)
+    sleep(0.25)
     print(pred)
     return correct_count, all_count
 
@@ -484,7 +504,8 @@ print(model)
 
 criterion = nn.NLLLoss()
 images, labels = next(iter(trainloader))
-if config.model_type.lower() == "linear":images = images.view(images.shape[0], -1) ##comment if conv2d
+if str(config.model_type).lower() == "linear":images = images.view(images.shape[0], -1) ##comment if conv2d
+else:images = images.view(images.size(0), -1) ##comment if conv2d
 
 # print(images)
 
@@ -512,7 +533,7 @@ max_score_epoch = 0
 
 
 
-print(config.learning_rate)
+print(lr)
 
 # correct_count, all_count = val()
 # print(correct_count/all_count, "TEST EPOCH")
@@ -524,9 +545,13 @@ for e in range(1,epochs+1):
         for g in optimizer.param_groups:
             g['lr'] = config.learning_rate[e]
 
+    print("==> Training", end="\r")
+    for x in range(3):print('==> Training', '.'*(x+1), end='\r');sleep(0.1)
     print("==> Training ...")
     train()
     model.eval()
+    print("==> Validating", end="\r")
+    for x in range(3):print('==> Validating', '.'*(x+1), end='\r');sleep(0.1)
     print("==> Validating ...")
     correct_count, all_count = val()
     validation_results[e] = correct_count/all_count
